@@ -1,5 +1,6 @@
 import pygame
 import random
+import time
 
 # 初始化pygame模块
 pygame.init()
@@ -47,6 +48,9 @@ running = True
 # 控制蛇移动的计数器
 move_counter = 0
 move_interval = 6  # 蛇每6帧移动一次
+
+# 游戏开始时间
+start_time = time.time()
 
 # 游戏主循环
 while running:
@@ -121,6 +125,37 @@ while running:
             screen.blit(body, (x, y))
 
     pygame.display.flip()
+
+# 游戏结束时的操作
+game_duration = int(time.time() - start_time)  # 游戏持续时间
+snake_length = len(snake_list)  # 蛇的长度
+
+# 创建字体对象
+font = pygame.font.Font(None, 36)
+
+# 创建文本表面
+game_over_text = font.render("游戏结束", True, (255, 0, 0))
+duration_text = font.render(f"坚持: {game_duration} 秒", True, (0, 0, 0))
+length_text = font.render(f"蛇的长度: {snake_length}", True, (0, 0, 0))
+
+# 获取文本表面的矩形，以便居中显示
+text_rect = game_over_text.get_rect(center=(screen.get_rect().centerx, screen.get_rect().centery - 50))
+duration_rect = duration_text.get_rect(center=(screen.get_rect().centerx, screen.get_rect().centery))
+length_rect = length_text.get_rect(center=(screen.get_rect().centerx, screen.get_rect().centery + 50))
+
+# 清空屏幕
+screen.fill((255, 255, 255))
+
+# 在屏幕上绘制文本
+screen.blit(game_over_text, text_rect)
+screen.blit(duration_text, duration_rect)
+screen.blit(length_text, length_rect)
+
+# 更新显示
+pygame.display.flip()
+
+# 等待一段时间让玩家阅读信息
+pygame.time.wait(3000)
 
 # 清理pygame资源
 pygame.quit()
